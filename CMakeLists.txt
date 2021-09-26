@@ -20,5 +20,10 @@ target_link_libraries(MaskDetectionTool
         Qt::Widgets
         "-framework Metal"
         "-framework MetalPerformanceShaders"
+        "-framework AVFoundation"
         )
 
+set_target_properties(MaskDetectionTool PROPERTIES
+        MACOS_BUNDLE ON
+        MACOS_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist
+        )
