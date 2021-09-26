@@ -6,8 +6,9 @@
 //
 
 #import <Cocoa/Cocoa.h>
+#import <AVFoundation/AVFoundation.h>
 
-@interface ViewController : NSViewController
+@interface ViewController : NSViewController <AVCaptureVideoDataOutputSampleBufferDelegate>
 
 
 @end

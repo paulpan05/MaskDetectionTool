@@ -10,7 +10,6 @@
 		691887F52700C98800DB40F4 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 691887F42700C98800DB40F4 /* AppDelegate.m */; };
 		691887F82700C98800DB40F4 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 691887F72700C98800DB40F4 /* ViewController.m */; };
 		691887FA2700C98D00DB40F4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 691887F92700C98D00DB40F4 /* Assets.xcassets */; };
-		691887FD2700C98D00DB40F4 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 691887FB2700C98D00DB40F4 /* Main.storyboard */; };
 		691887FF2700C98D00DB40F4 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 691887FE2700C98D00DB40F4 /* main.m */; };
 		6918880A2700C98D00DB40F4 /* MaskDetectionToolTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 691888092700C98D00DB40F4 /* MaskDetectionToolTests.m */; };
 		691888142700C98D00DB40F4 /* MaskDetectionToolUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 691888132700C98D00DB40F4 /* MaskDetectionToolUITests.m */; };
@@ -41,7 +40,6 @@
 		691887F62700C98800DB40F4 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
 		691887F72700C98800DB40F4 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
 		691887F92700C98D00DB40F4 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		691887FC2700C98D00DB40F4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		691887FE2700C98D00DB40F4 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		691888002700C98D00DB40F4 /* MaskDetectionTool.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MaskDetectionTool.entitlements; sourceTree = "<group>"; };
 		691888052700C98D00DB40F4 /* MaskDetectionToolTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MaskDetectionToolTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -104,7 +102,6 @@
 				691887F62700C98800DB40F4 /* ViewController.h */,
 				691887F72700C98800DB40F4 /* ViewController.m */,
 				691887F92700C98D00DB40F4 /* Assets.xcassets */,
-				691887FB2700C98D00DB40F4 /* Main.storyboard */,
 				691887FE2700C98D00DB40F4 /* main.m */,
 				691888002700C98D00DB40F4 /* MaskDetectionTool.entitlements */,
 			);
@@ -232,7 +229,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				691887FA2700C98D00DB40F4 /* Assets.xcassets in Resources */,
-				691887FD2700C98D00DB40F4 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -294,17 +290,6 @@
 			targetProxy = 691888102700C98D00DB40F4 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
-
-/* Begin PBXVariantGroup section */
-		691887FB2700C98D00DB40F4 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				691887FC2700C98D00DB40F4 /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
-/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		691888172700C98D00DB40F4 /* Debug */ = {
@@ -428,8 +413,8 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSCameraUsageDescription = "This app requires camera access to detect mask on your face.";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				INFOPLIST_KEY_NSMainStoryboardFile = Main;
 				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -452,8 +437,8 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSCameraUsageDescription = "This app requires camera access to detect mask on your face.";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				INFOPLIST_KEY_NSMainStoryboardFile = Main;
 				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
