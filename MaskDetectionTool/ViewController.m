@@ -9,7 +9,7 @@
 
 @implementation ViewController
 
-- (AVCaptureSession *) setupCaptureSession {
+- (AVCaptureVideoPreviewLayer *)setupCaptureSession {
     AVCaptureSession *session = [[AVCaptureSession alloc] init];
     [session beginConfiguration];
     session.sessionPreset = AVCaptureSessionPreset640x480;
@@ -24,11 +24,20 @@
     if([session canAddOutput:output]) {
         [session addOutput:output];
         output.alwaysDiscardsLateVideoFrames = true;
-        output.videoSettings = (NSDictionary<NSString *, id> *) kCVPixelBufferPixelFormatTypeKey;
+        output.videoSettings = [[NSDictionary alloc] initWithObjects:@[[NSNumber numberWithInt:kCVPixelFormatType_420YpCbCr8BiPlanarFullRange]] forKeys:@[(__bridge NSString *) kCVPixelBufferPixelFormatTypeKey]];
         [output setSampleBufferDelegate:self queue:queue];
     }
+    AVCaptureConnection *connection = [output connectionWithMediaType:AVMediaTypeVideo];
+    
+    connection.enabled = true;
     [session commitConfiguration];
-    return session;
+    
+    AVCaptureVideoPreviewLayer *layer = [AVCaptureVideoPreviewLayer layerWithSession:session];
+    
+    layer.videoGravity = AVLayerVideoGravityResizeAspectFill;
+    // [session startRunning];
+    
+    return layer;
 }
 
 - (void)loadView {
@@ -39,27 +48,36 @@
     [super viewDidLoad];
 
     // Do any additional setup after loading the view.
-    switch([AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeVideo]) {
-        case AVAuthorizationStatusDenied:
-            break;
-        case AVAuthorizationStatusRestricted:
-            break;
-        case AVAuthorizationStatusNotDetermined:
-            [AVCaptureDevice requestAccessForMediaType:AVMediaTypeVideo completionHandler:^(BOOL granted){
-                if (granted) {
-                    
-                }
-            }];
-            break;
-        case AVAuthorizationStatusAuthorized:
-            break;
-    }
+
     NSView *subView = [[NSView alloc] initWithFrame:NSMakeRect(0, 0, NSScreen.mainScreen.frame.size.width / 4, NSScreen.mainScreen.frame.size.height / 4)];
     
     [self.view addSubview:subView];
     
     subView.wantsLayer = true;
     subView.layer.backgroundColor = NSColor.redColor.CGColor;
+    switch([AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeVideo]) {
+        case AVAuthorizationStatusDenied:
+            break;
+        case AVAuthorizationStatusRestricted:
+            break;
+        case AVAuthorizationStatusAuthorized: {
+            AVCaptureVideoPreviewLayer *layer = [self setupCaptureSession];
+            CALayer *rootLayer = subView.layer;
+            layer.frame = rootLayer.bounds;
+            [rootLayer addSublayer:layer];
+            break;
+        }
+        case AVAuthorizationStatusNotDetermined:
+            [AVCaptureDevice requestAccessForMediaType:AVMediaTypeVideo completionHandler:^(BOOL granted){
+                if (granted) {
+                    AVCaptureVideoPreviewLayer *layer = [self setupCaptureSession];
+                    CALayer *rootLayer = subView.layer;
+                    layer.frame = rootLayer.bounds;
+                    [rootLayer addSublayer:layer];
+                }
+            }];
+            break;
+    }
 }
 
 

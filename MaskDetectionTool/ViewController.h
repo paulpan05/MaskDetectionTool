@@ -10,6 +10,7 @@
 
 @interface ViewController : NSViewController <AVCaptureVideoDataOutputSampleBufferDelegate>
 
+- (AVCaptureVideoPreviewLayer *)setupCaptureSession;
 
 @end
 
