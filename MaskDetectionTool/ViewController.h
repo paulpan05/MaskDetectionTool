@@ -6,11 +6,12 @@
 //
 
 #import <Cocoa/Cocoa.h>
+#import <Metal/Metal.h>
 #import <AVFoundation/AVFoundation.h>
 
 @interface ViewController : NSViewController <AVCaptureVideoDataOutputSampleBufferDelegate>
 
-- (AVCaptureVideoPreviewLayer *)setupCaptureSession;
+- (void)setupCaptureSession;
 
 @end
 

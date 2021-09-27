@@ -9,24 +9,51 @@
 
 @implementation ViewController
 
-- (AVCaptureVideoPreviewLayer *)setupCaptureSession {
+- (void)captureOutput:(AVCaptureOutput *)output didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer fromConnection:(AVCaptureConnection *)connection {
+    CVMetalTextureCacheRef textureCache = nil;
+    CVReturn status = CVMetalTextureCacheCreate(kCFAllocatorDefault, nil, MTLCreateSystemDefaultDevice(), nil, &textureCache);
+    if (status != kCVReturnSuccess) {
+    }
+    
+    CVPixelBufferRef imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer);
+    size_t width = CVPixelBufferGetWidth(imageBuffer);
+    size_t height = CVPixelBufferGetHeight(imageBuffer);
+    
+    CVMetalTextureRef texture = nil;
+    CVMetalTextureCacheCreateTextureFromImage(kCFAllocatorDefault, textureCache, imageBuffer, nil, MTLPixelFormatBGRA8Unorm, width, height, 0, &texture);
+    
+    if (texture == nil) {}
+    
+    id<MTLTexture> metalTexture = CVMetalTextureGetTexture(texture);
+    printf("Hello\n");
+}
+
+- (void)setupCaptureSession {
     AVCaptureSession *session = [[AVCaptureSession alloc] init];
-    [session beginConfiguration];
-    session.sessionPreset = AVCaptureSessionPreset640x480;
     AVCaptureDevice *device = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
     NSError *error = nil;
     AVCaptureDeviceInput *input = [AVCaptureDeviceInput deviceInputWithDevice:device error:&error];
-    if([session canAddInput:input]) {
-        [session addInput:input];
+    
+    if (error != nil) {}
+    
+    [session beginConfiguration];
+    session.sessionPreset = AVCaptureSessionPreset640x480;
+    
+    if(![session canAddInput:input]) {
     }
+    
+    [session addInput:input];
+    
     dispatch_queue_t queue = dispatch_queue_create("Video Queue", DISPATCH_QUEUE_CONCURRENT);
     AVCaptureVideoDataOutput* output = [[AVCaptureVideoDataOutput alloc] init];
-    if([session canAddOutput:output]) {
-        [session addOutput:output];
-        output.alwaysDiscardsLateVideoFrames = true;
-        output.videoSettings = [[NSDictionary alloc] initWithObjects:@[[NSNumber numberWithInt:kCVPixelFormatType_420YpCbCr8BiPlanarFullRange]] forKeys:@[(__bridge NSString *) kCVPixelBufferPixelFormatTypeKey]];
-        [output setSampleBufferDelegate:self queue:queue];
-    }
+    
+    if (![session canAddOutput:output]) {}
+    
+    [session addOutput:output];
+    output.alwaysDiscardsLateVideoFrames = true;
+    output.videoSettings = [[NSDictionary alloc] initWithObjects:@[[NSNumber numberWithInt:kCVPixelFormatType_420YpCbCr8BiPlanarFullRange]] forKeys:@[(__bridge NSString *) kCVPixelBufferPixelFormatTypeKey]];
+    [output setSampleBufferDelegate:self queue:queue];
+    
     AVCaptureConnection *connection = [output connectionWithMediaType:AVMediaTypeVideo];
     
     connection.enabled = true;
@@ -35,9 +62,13 @@
     AVCaptureVideoPreviewLayer *layer = [AVCaptureVideoPreviewLayer layerWithSession:session];
     
     layer.videoGravity = AVLayerVideoGravityResizeAspectFill;
-    // [session startRunning];
+    [session startRunning];
     
-    return layer;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        CALayer *rootLayer = self.view.layer;
+        layer.frame = rootLayer.bounds;
+        [rootLayer addSublayer:layer];
+    });
 }
 
 - (void)loadView {
@@ -61,19 +92,13 @@
         case AVAuthorizationStatusRestricted:
             break;
         case AVAuthorizationStatusAuthorized: {
-            AVCaptureVideoPreviewLayer *layer = [self setupCaptureSession];
-            CALayer *rootLayer = subView.layer;
-            layer.frame = rootLayer.bounds;
-            [rootLayer addSublayer:layer];
+            [self setupCaptureSession];
             break;
         }
         case AVAuthorizationStatusNotDetermined:
             [AVCaptureDevice requestAccessForMediaType:AVMediaTypeVideo completionHandler:^(BOOL granted){
                 if (granted) {
-                    AVCaptureVideoPreviewLayer *layer = [self setupCaptureSession];
-                    CALayer *rootLayer = subView.layer;
-                    layer.frame = rootLayer.bounds;
-                    [rootLayer addSublayer:layer];
+                    [self setupCaptureSession];
                 }
             }];
             break;
