@@ -7,6 +7,7 @@
 
 #import <Cocoa/Cocoa.h>
 #import <Metal/Metal.h>
+#import <MetalPerformanceShaders/MetalPerformanceShaders.h>
 #import <AVFoundation/AVFoundation.h>
 
 @interface ViewController : NSViewController <AVCaptureVideoDataOutputSampleBufferDelegate>

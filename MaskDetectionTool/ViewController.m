@@ -25,6 +25,8 @@
     if (texture == nil) {}
     
     id<MTLTexture> metalTexture = CVMetalTextureGetTexture(texture);
+    
+    MPSImage *image = [[MPSImage alloc] initWithTexture:metalTexture featureChannels:3];
     printf("Hello\n");
 }
 
